@@ -1,0 +1,17 @@
+<Configuration>
+  <vGPU>Disable</vGPU>
+  <Networking>Disable</Networking>
+  <MappedFolders>
+    <MappedFolder>
+      <HostFolder>D:\Projects\SandboxNetworkTest\guest</HostFolder>
+      <ReadOnly>true</ReadOnly>
+    </MappedFolder>
+    <MappedFolder>
+      <HostFolder>D:\Projects\SandboxNetworkTest\runtime</HostFolder>
+      <ReadOnly>false</ReadOnly>
+    </MappedFolder>
+  </MappedFolders>
+  <LogonCommand>
+    <Command>powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File C:\Users\WDAGUtilityAccount\Desktop\guest\Test-MappedUnixSocketClient.ps1</Command>
+  </LogonCommand>
+</Configuration>

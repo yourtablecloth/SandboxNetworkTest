@@ -1,0 +1,17 @@
+<Configuration>
+  <vGPU>Disable</vGPU>
+  <Networking>Enable</Networking>
+  <MappedFolders>
+    <MappedFolder>
+      <HostFolder>D:\Projects\SandboxNetworkTest\guest</HostFolder>
+      <ReadOnly>true</ReadOnly>
+    </MappedFolder>
+    <MappedFolder>
+      <HostFolder>D:\Projects\SandboxNetworkTest\runtime</HostFolder>
+      <ReadOnly>false</ReadOnly>
+    </MappedFolder>
+  </MappedFolders>
+  <LogonCommand>
+    <Command>powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File C:\Users\WDAGUtilityAccount\Desktop\guest\Test-HostTcpUdpListeners.ps1 -Mode Standard -TcpPort 18080 -UdpPort 18081</Command>
+  </LogonCommand>
+</Configuration>
