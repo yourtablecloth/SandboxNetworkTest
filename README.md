@@ -6,6 +6,21 @@ This project tests TCP, UDP, name resolution, disabled networking, Protected Cli
 
 See [Windows Sandbox host and guest discovery boundaries](DISCOVERY.md) for discovery options that exclude mapped files and folders and the Windows Sandbox CLI.
 
+## Outcome matrix
+
+The matrix below separates observed success and failure from combinations that were not tested. `Unavailable` means that the configuration removed the network path required by the capability.
+
+| Capability | `Networking=Enable` | `Networking=Enable` with Protected Client | `Networking=Disable` |
+| --- | --- | --- | --- |
+| Host to Sandbox TCP/HTTP | Success | Success | Failure |
+| Host to Sandbox UDP | Success | Success | Failure |
+| Sandbox to host TCP | Success | Success | Unavailable |
+| Sandbox to host UDP | Success | Success | Unavailable |
+| Sandbox outbound Internet | Success | Success | Failure |
+| Mapped `guest` and `runtime` folders | Success | Success | Success |
+| Cross-kernel `AF_UNIX` through mapped NTFS | Not tested | Not tested | Failure |
+| Generated Sandbox name as a fixed endpoint | Failure | Not tested | Unavailable |
+
 ## Summary of all experiment results
 
 The following results were observed on August 31, 2026, using Windows 11 Pro build 26200 and Windows Sandbox 0.8.107.0.

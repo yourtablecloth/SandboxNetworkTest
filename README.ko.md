@@ -6,6 +6,21 @@ Windows Sandbox와 호스트 사이의 TCP, UDP, 이름 해석, 네트워크 비
 
 파일 및 폴더 매핑과 Windows Sandbox CLI를 제외한 호스트 및 게스트 주소 발견 범위는 [디스커버리 가능 범위](DISCOVERY.ko.md)에 정리했습니다.
 
+## 성공 및 실패 매트릭스
+
+다음 매트릭스는 실제로 관측한 성공과 실패를 시험하지 않은 조합과 구분합니다. `사용 불가`는 해당 기능에 필요한 네트워크 경로가 구성상 사라졌음을 뜻합니다.
+
+| 기능 | `Networking=Enable` | `Networking=Enable`과 Protected Client | `Networking=Disable` |
+| --- | --- | --- | --- |
+| 호스트에서 Sandbox로 향하는 TCP/HTTP | 성공 | 성공 | 실패 |
+| 호스트에서 Sandbox로 향하는 UDP | 성공 | 성공 | 실패 |
+| Sandbox에서 호스트로 향하는 TCP | 성공 | 성공 | 사용 불가 |
+| Sandbox에서 호스트로 향하는 UDP | 성공 | 성공 | 사용 불가 |
+| Sandbox의 외부 인터넷 연결 | 성공 | 성공 | 실패 |
+| `guest` 및 `runtime` 폴더 매핑 | 성공 | 성공 | 성공 |
+| 매핑된 NTFS를 통한 커널 간 `AF_UNIX` | 미시험 | 미시험 | 실패 |
+| 자동 생성 Sandbox 이름을 고정 엔드포인트로 사용 | 실패 | 미시험 | 사용 불가 |
+
 ## 전체 실험 결과 요약
 
 2026년 8월 31일 Windows 11 Pro 빌드 26200과 Windows Sandbox 0.8.107.0에서 다음 결과를 확인했습니다.

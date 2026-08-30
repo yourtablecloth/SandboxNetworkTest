@@ -6,9 +6,20 @@ As of August 31, 2026, Windows Sandbox connects to the Hyper-V Default Switch wh
 
 This document separately evaluates finding the Sandbox IP address and computer name from the host and finding the host IP address and host name from Sandbox. It distinguishes direct discovery through platform information, cooperative discovery through a peer response, and heuristics that provide only candidate addresses.
 
-The document first defines its scope and decision labels. It then covers the direction matrix, host-side discovery, Sandbox-side discovery, cooperative alternatives, and methods that are not dependable enough to act as a discovery contract.
+The matrix below presents the conclusion first. The remaining sections define the scope and decision labels, then cover host-side discovery, Sandbox-side discovery, cooperative alternatives, and methods that are not dependable enough to act as a discovery contract.
 
 > Snapshot date: August 31, 2026. The test environment used Windows 11 Pro build 26200 and Windows Sandbox 0.8.107.0. Windows Sandbox implementation details and the Hyper-V Default Switch address range may change in later versions.
+
+## Discovery outcome matrix
+
+The matrix summarizes the available discovery result by direction, identity type, and peer cooperation. Protected Client produced the same results as standard networking in the tested environment.
+
+| Direction | Identity | `Networking=Enable` without peer cooperation | `Networking=Enable` with peer cooperation | `Networking=Disable` |
+| --- | --- | --- | --- | --- |
+| Host to Sandbox | IP address | Heuristic candidates only | Available from the remote address of a guest connection | Unavailable |
+| Host to Sandbox | Computer name | Unavailable | Available when the guest sends its name | Unavailable |
+| Sandbox to host | IP address | Directly available from the default route | Available and verifiable through a host response | Unavailable |
+| Sandbox to host | Host name | Unavailable | Available when the host returns its name | Unavailable |
 
 ## Scope and decision labels
 
@@ -26,17 +37,6 @@ This document applies the following conditions:
 `Directly available` means that the target can be identified from published operating-system network information without the peer transmitting its identity. `Available with peer cooperation` means that the peer must respond on a known port or send a registration message. `Heuristic` means that a candidate can be found but cannot be proven to be the Windows Sandbox endpoint.
 
 With `<Networking>Disable</Networking>`, the guest had no network adapter or default route. None of the network discovery methods in this document can operate in that state. See the [networking disabled comparison](README.md#networking-disabled-comparison).
-
-## Direction matrix
-
-The following table summarizes the result by direction and identity type.
-
-| Direction | Identity | Without peer cooperation | With peer cooperation | Decision |
-| --- | --- | --- | --- | --- |
-| Host to Sandbox | IP address | Neighbor cache and port scanning provide candidates | Observe the remote address of a guest registration connection | Available with cooperation; heuristic otherwise |
-| Host to Sandbox | Computer name | No `.wsb` query property and no known name to start with | Guest sends `$env:COMPUTERNAME` | Available with cooperation |
-| Sandbox to host | IP address | Read `NextHop` from the default IPv4 route | Confirm a host service at the same address | Directly available in the tested implementation |
-| Sandbox to host | Host name | The gateway address carries no host-name field | Host includes its computer name in a response | Available with cooperation |
 
 Windows Sandbox uses the Hyper-V Default Switch, while Protected Client applies a separate security boundary to the RDP session. Microsoft's [Windows Sandbox default configuration](https://learn.microsoft.com/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-configure-using-wsb-file) and the [bidirectional TCP and UDP results](README.md#reverse-probe-from-sandbox-to-host-listeners) show that Protected Client did not change these decisions in the tested environment.
 
